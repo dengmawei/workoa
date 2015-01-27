@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE tiles-definitions PUBLIC
+       "-//Apache Software Foundation//DTD Tiles Configuration 3.0//EN"
+       "http://tiles.apache.org/dtds/tiles-config_3_0.dtd">
+<tiles-definitions>
+	<definition name="home.page" template="/tiles/hometemplate.jsp">
+		<put-attribute name="header" value="/tiles/header.jsp"></put-attribute>
+		<put-attribute name="leftMenu" value="/tiles/leftMenu.jsp"></put-attribute>
+	</definition>
+	
+	<definition name="empty.page" template="/tiles/empty.jsp">
+	</definition>
+	
+	<definition name="login.page" template="/login.jsp"></definition>
+	
+	<definition name="index.page" extends="home.page">
+		<put-attribute name="body" value="/index.jsp"></put-attribute>
+	</definition>
+	
+	<definition name="depart.page" extends="home.page">
+		<put-attribute name="body" value="/WEB-INF/jsp/depart.jsp"></put-attribute>
+	</definition>
+	
+	<definition name="user.page" extends="home.page">
+		<put-attribute name="body" value="/WEB-INF/jsp/user.jsp"></put-attribute>
+	</definition>
+	
+	<definition name="role.page" extends="home.page">
+		<put-attribute name="body" value="/WEB-INF/jsp/role.jsp"></put-attribute>
+	</definition>
+	
+	<definition name="role.user.page" extends="home.page">
+		<put-attribute name="body" value="/WEB-INF/jsp/roleUser.jsp"></put-attribute>
+	</definition>
+	
+	<definition name="module.page" extends="home.page">
+		<put-attribute name="body" value="/WEB-INF/jsp/module.jsp"></put-attribute>
+	</definition>
+	
+	<definition name="module.add.page" extends="home.page">
+		<put-attribute name="body" value="/WEB-INF/jsp/addModule.jsp"></put-attribute>
+	</definition>
+	
+	<definition name="module.edit.page" extends="home.page">
+		<put-attribute name="body" value="/WEB-INF/jsp/editModule.jsp"></put-attribute>
+	</definition>
+	
+	<definition name="404.page" extends="home.page">
+		<put-attribute name="body" value="/tiles/404.jsp"></put-attribute>
+	</definition>
+	
+	<definition name="unauthorized.page" extends="home.page">
+		<put-attribute name="body" value="/tiles/unauthorized.jsp"></put-attribute>
+	</definition>
+
+	<definition name="action.page" extends="home.page">
+		<put-attribute name="body" value="/WEB-INF/jsp/action.jsp"></put-attribute>
+	</definition>
+	
+	<definition name="permit.page" extends="home.page">
+		<put-attribute name="body" value="/WEB-INF/jsp/permit.jsp"></put-attribute>
+	</definition>
+	
+	<definition name="role.permit.page" extends="home.page">
+		<put-attribute name="body" value="/WEB-INF/jsp/rolePermit.jsp"></put-attribute>
+	</definition>
+	
+	<definition name="schedule.page" extends="home.page">
+		<put-attribute name="body" value="/WEB-INF/jsp/scheduleHome.jsp"></put-attribute>
+	</definition>
+	
+	<definition name="schedule.list.page" extends="home.page">
+		<put-attribute name="body" value="/WEB-INF/jsp/scheduleList.jsp"></put-attribute>
+	</definition>
+
+	<!-- 加班 start -->
+	<definition name="overtime.page" extends="home.page">
+		<put-attribute name="body" value="/WEB-INF/jsp/workflow/overtime/overtime.jsp"></put-attribute>
+	</definition>
+
+	<definition name="add.overtime.page" extends="home.page">
+		<put-attribute name="body" value="/WEB-INF/jsp/workflow/overtime/addOvertime.jsp"></put-attribute>
+	</definition>
+	
+	<definition name="edit.overtime.page" extends="home.page">
+		<put-attribute name="body" value="/WEB-INF/jsp/workflow/overtime/editOvertime.jsp"></put-attribute>
+	</definition>
+	
+	<definition name="info.overtime.page" extends="home.page">
+		<put-attribute name="body" value="/WEB-INF/jsp/workflow/overtime/infoOvertime.jsp"></put-attribute>
+	</definition>
+	
+	<definition name="departApprove.overtime.page" extends="home.page">
+		<put-attribute name="body" value="/WEB-INF/jsp/workflow/overtime/departApproveOvertime.jsp"></put-attribute>
+	</definition>
+	
+	<definition name="generalApprove.overtime.page" extends="home.page">
+		<put-attribute name="body" value="/WEB-INF/jsp/workflow/overtime/generalApproveOvertime.jsp"></put-attribute>
+	</definition>
+	
+	<definition name="staffSummary.overtime.page" extends="home.page">
+		<put-attribute name="body" value="/WEB-INF/jsp/workflow/overtime/staffSummaryOvertime.jsp"></put-attribute>
+	</definition>
+	
+	<definition name="refuseModify.overtime.page" extends="home.page">
+		<put-attribute name="body" value="/WEB-INF/jsp/workflow/overtime/refuseModifyOvertime.jsp"></put-attribute>
+	</definition>
+	
+	<definition name="detail.overtime.page" extends="empty.page">
+		<put-attribute name="body" value="/WEB-INF/jsp/workflow/overtime/detailOvertime.jsp"></put-attribute>
+	</definition>
+	<!-- 加班 end -->
+	
+	<definition name="process.page" extends="home.page">
+		<put-attribute name="body" value="/WEB-INF/jsp/workflow/myPendingProcess.jsp"></put-attribute>
+	</definition>
+
+	<definition name="process.manage.page" extends="home.page">
+		<put-attribute name="body" value="/WEB-INF/jsp/workflow/processManageCenter.jsp"></put-attribute>
+	</definition>
+	
+	<definition name="processConfigure.page" extends="home.page">
+		<put-attribute name="body" value="/WEB-INF/jsp/workflow/processConfigure.jsp"></put-attribute>
+	</definition>
+	
+	<definition name="process.info.page" extends="home.page">
+		<put-attribute name="body" value="/WEB-INF/jsp/workflow/processDetailInfo.jsp"></put-attribute>
+	</definition>
+</tiles-definitions>
