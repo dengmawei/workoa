@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<process name="overtime" xmlns="http://jbpm.org/4.4/jpdl">
+   <start g="34,190,48,48" name="start">
+      <transition to="exclusive2"/>
+   </start>
+   <end g="931,182,48,48" name="end"/>
+   <task g="271,178,106,69" name="departManagerApprove">
+      <assignment-handler class="org.common.workflow.AssignTask">
+      	<field name="isSign">
+      		<string value="no"/>
+      	</field>
+      	<field name="roleName">
+      		<string value="departManager"/>
+      	</field>
+      	<field name="userGroup">
+      		<list>
+      			<string value="dengmawei"/>
+      		</list>
+      	</field>
+      </assignment-handler>
+      <transition g="-124,-22" name="toGeneralApprove" to="generalManagerApprove"/>
+      <transition g="-80,-20" name="toReturn" to="exclusive1"/>
+   </task>
+   <task g="467,165,126,86" name="generalManagerApprove">
+   	  <assignment-handler class="org.common.workflow.AssignTask">
+   	  	<field name="isSign">
+      		<string value="yes"/>
+      	</field>
+      	<field name="roleName">
+      		<string value="generalManager"/>
+      	</field>
+      </assignment-handler>
+      <transition g="-5,-20" name="toStaffApprove" to="staffOvertimeHourSummary"/>
+      <transition g="-5,-20" name="toReturn" to="exclusive1"/>
+   </task>
+   <task g="695,149,170,111" name="staffOvertimeHourSummary">
+   	  <assignment-handler class="org.common.workflow.AssignTask">
+      	<field name="roleName">
+      		<string value="staffManager"/>
+      	</field>
+      </assignment-handler>
+      <transition g="-5,-20" name="toEnd" to="end"/>
+   </task>
+   <decision expr="#{target}" g="299,17,48,48" name="exclusive1">
+      <transition g="954,39:-5,-20" name="toEnd" to="end"/>
+      <transition g="-5,-20" name="toModify" to="moidfy"/>
+   </decision>
+   <decision expr="#{target}" g="114,187,48,48" name="exclusive2">
+      <transition g="-44,-20" name="toDepartApprove" to="departManagerApprove"/>
+      <transition g="178,330;491,327;954,329:-5,-20" name="toEnd" to="end"/>
+   </decision>
+   <task assignee="#{applicantId}" g="134,17,92,52" name="moidfy">
+   	  <assignment-handler class="org.common.workflow.AssignTask">
+      	<field name="isSelf">
+      		<true/>
+      	</field>
+      </assignment-handler>
+      <transition g="-5,-20" name="toSub" to="exclusive2"/>
+   </task>
+</process>

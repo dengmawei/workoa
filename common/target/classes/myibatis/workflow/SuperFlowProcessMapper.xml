@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.common.dao.workflow.SuperFlowProcessRepository">
+	<resultMap type="SuperFlowProcess" id="SuperFlowProcessResult">
+		<result property="id" column="id"/>
+		<result property="userId" column="user_id"/>
+		<result property="userName" column="user_name"/>
+		<result property="realName" column="real_name"/>
+		<result property="createTime" column="create_time"/>
+		<result property="processKey" column="process_key"/>
+		<result property="processName" column="process_name"/>
+	</resultMap>
+	
+	<insert id="save" parameterType="SuperFlowProcess">
+		insert into workoa_flow_process(user_id,user_name,real_name,create_time,process_key,process_name) 
+		values(#{userId},#{userName},#{realName},#{createTime},#{processKey},#{processName});
+		<selectKey keyProperty="id" resultType="long">
+			SELECT LAST_INSERT_ID()
+		</selectKey>
+	</insert>
+	
+	<select id="selectFlowProcessCountByPage" parameterType="java.util.Map" resultType="int">
+		select count(*) from workoa_flow_process where 1=1
+		<if test="processKey!=null and processKey!=''">
+			and process_key=#{processKey}
+		</if>
+		<if test="applierId!=null">
+			and user_id=#{applierId} 
+		</if>
+		<if test="startTime!=null and startTime!=''">
+			<![CDATA[and create_time>=#{startTime}]]>
+		</if>
+		<if test="endTime!=null and endTime!=''">
+			<![CDATA[and create_time<=#{endTime}]]>
+		</if>
+	</select>
+
+	<select id="selectFlowProcessListByPage" parameterType="java.util.Map" resultMap="SuperFlowProcessResult">
+		select * from workoa_flow_process where 1=1
+		<if test="processKey!=null and processKey!=''">
+			and process_key=#{processKey}
+		</if>
+		<if test="applierId!=null">
+			and user_id=#{applierId} 
+		</if>
+		<if test="startTime!=null and startTime!=''">
+			<![CDATA[and create_time>=#{startTime}]]>
+		</if>
+		<if test="endTime!=null and endTime!=''">
+			<![CDATA[and create_time<=#{endTime}]]>
+		</if>
+		order by create_time desc limit #{limitNum} offset #{offset}; 
+	</select>
+</mapper>

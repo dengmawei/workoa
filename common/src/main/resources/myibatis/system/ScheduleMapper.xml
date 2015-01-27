@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.common.dao.ScheduleRepository">
+	<resultMap id="scheduleResult" type="Schedule">
+		<result property="id" column="id"/>
+		<result property="userId" column="user_id"/>
+		<result property="title" column="title"/>
+		<result property="content" column="content"/>
+		<result property="createTime" column="create_time"/>
+		<result property="startTime" column="start_time"/>
+		<result property="endTime" column="end_time"/>
+		<result property="updateTime" column="update_time"/>
+		<result property="status" column="status"/>
+		<result property="personal" column="personal"/>
+		<result property="flag" column="flag"/>
+	</resultMap>
+	
+	<resultMap type="ScheduleParticipant" id="scheduleParticipantResult">
+		<result property="id" column="id"/>	
+		<result property="scheduleId" column="schedule_id"/>	
+		<result property="participatorId" column="participator_id"/>	
+	</resultMap>
+	
+	<insert id="saveSchedule" parameterType="Schedule">
+		insert into workoa_schedule(user_id,title,content,create_time,start_time,end_time,status,personal,flag) 
+		values(#{userId},#{title},#{content},#{createTime},#{startTime},#{endTime},#{status},#{personal},#{flag});
+		<selectKey keyProperty="id" resultType="long">
+			SELECT LAST_INSERT_ID();
+		</selectKey>
+	</insert>
+	
+	<insert id="saveScheduleParticipant" parameterType="ScheduleParticipant">
+		insert into workoa_schedule_participant(schedule_id,participator_id) values(#{scheduleId},#{participatorId});
+	</insert>
+	
+	<update id="updateSchedule" parameterType="Schedule">
+		update workoa_schedule set title=#{title},content=#{content},start_time=#{startTime}
+		,end_time=#{endTime},update_time=#{updateTime},status=#{status},personal=#{personal} where id=#{id}
+	</update>
+	
+	<select id="selectScheduleById" parameterType="long" resultMap="scheduleResult">
+		select * from workoa_schedule where id=#{id};
+	</select>
+	
+	<select id="selctScheduleByUserId" parameterType="long" resultMap="scheduleResult">
+		select * from workoa_schedule where user_id=#{userId} and status=1 and personal=1;
+	</select>
+	
+	<delete id="deleteSchedule" parameterType="long">
+		delete from workoa_schedule where id=#{id};
+	</delete>
+	
+	<update id="checkSchedule" parameterType="java.util.Map">
+		update workoa_schedule set status = #{status} where id in 
+		<foreach collection="ids" index="index" open="(" close=")" separator="," item="item">
+			#{item}		
+		</foreach>
+	</update>
+	
+	<select id="selectPersonalScheduleFor5" parameterType="long" resultMap="scheduleResult">
+		select * from workoa_schedule where user_id=#{userId} and status=1 and personal=1 order by create_time desc;
+	</select>
+	
+	<select id="selectWorkScheduleFor5" parameterType="long" resultMap="scheduleResult">
+		select s.* from workoa_schedule s,workoa_schedule_participant p where s.id=p.schedule_id and p.participator_id=#{userId} and s.status=1 and s.personal=0 order by s.create_time desc;
+	</select>
+	
+	<resultMap type="org.common.entity.view.schedule.ScheduleView" id="scheduleView">
+		<result property="id" column="id"/>
+		<result property="title" column="title"/>
+		<result property="startTime" column="start_time"/>
+		<result property="endTime" column="end_time"/>
+	</resultMap>
+	
+	<select id="selectScheduleByCondition" parameterType="java.util.Map" resultMap="scheduleView">
+		select s.id,s.title,s.start_time,s.end_time from workoa_schedule s,workoa_schedule_participant p where s.id=p.schedule_id and p.participator_id=#{userId} 
+		<if test="start!=null and start!=''">
+			<![CDATA[and s.start_time>=#{start}]]>
+		</if>
+		<if test="end!=null and end!=''">
+			<![CDATA[and s.start_time<=#{end}]]>
+		</if>
+		order by s.id desc;		
+	</select>
+	
+	<resultMap type="org.common.entity.view.schedule.ScheduleView" id="schedulePageView">
+		<result property="id" column="id"/>
+		<result property="userId" column="user_id"/>
+		<result property="title" column="title"/>
+		<result property="startTime" column="start_time"/>
+		<result property="endTime" column="end_time"/>
+		<result property="createTime" column="create_time"/>
+		<result property="status" column="status"/>
+		<result property="flag" column="flag"/>
+		<result property="personal" column="personal"/>
+	</resultMap>
+	
+	<select id="selectScheduelCountByPage" parameterType="java.util.Map" resultType="int">
+		select count(*) from workoa_schedule where 1=1 
+		<if test="startTime!=null and startTime!=''">
+			<![CDATA[and create_time>=#{startTime}]]>
+		</if>
+		<if test="endTime!=null and endTime!=''">
+			<![CDATA[and create_time<=#{endTime}]]>
+		</if>
+		<if test="personal!=null">
+			and personal=#{personal}
+		</if>
+		<if test="status!=-1">
+			and status=#{status}
+		</if>
+		<if test="userId!=null">
+			and user_id=#{userId}
+		</if>
+	</select>
+	
+	<select id="selectScheduleListByPage" parameterType="java.util.Map" resultMap="schedulePageView">
+		select id,user_id,title,start_time,end_time,create_time,status,flag,personal from workoa_schedule where 1=1 
+		<if test="startTime!=null and startTime!=''">
+			<![CDATA[and create_time>=#{startTime}]]>
+		</if>
+		<if test="endTime!=null and endTime!=''">
+			<![CDATA[and create_time<=#{endTime}]]>
+		</if>
+		<if test="personal!=null">
+			and personal=#{personal}
+		</if>
+		<if test="status!=-1">
+			and status=#{status}
+		</if>
+		<if test="userId!=null">
+			and user_id=#{userId}
+		</if>
+		order by flag desc,create_time desc 
+		limit #{limitNum} offset #{offset}; 
+	</select>
+</mapper>
