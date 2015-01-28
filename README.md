@@ -1,2 +1,2 @@
 # workoa
-办公oa
+基于bootstrap和jbpm开发的办公oa
